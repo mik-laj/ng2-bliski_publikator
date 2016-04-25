@@ -1,0 +1,55 @@
+<h2>Edycja monitoringu</h2>
+<h3>Informacje podstawowe</h3>
+<div class="form-horizontal">
+	<div class="form-group">
+		<label for="monitoring_title" class="col-sm-2 control-label">Tytuł:</label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" [(ngModel)]="monitoring.title" id="monitoring_title">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="monitoring_description" class="col-sm-2 control-label">Opis:</label>
+		<div class="col-sm-10">
+			<textarea class="form-control" [(ngModel)]="monitoring.description" id="monitoring_description">
+			</textarea>
+		</div>
+	</div>
+</div>
+<h3>Pytania</h3>
+<div class="questions">
+	<accordion *ngIf="monitoring.questions.length > 0">
+		<accordion-group #group *ngFor="#question of monitoring.questions">
+			<div accordion-heading>
+				<button class="btn btn-primary btn-xs" (click)="removeQuestion(question)"><i class="fa fa-trash" aria-hidden="true"></i> Remove</button>
+				Pytanie: {{ question.label }}
+				<i class="pull-right fa"  aria-hidden="true"
+					[ngClass]="{'fa-caret-up': group?.isOpen, 'fa-caret-down': !group?.isOpen}"></i>
+			</div>
+			<sowp-question-edit [question]="question" [questions]="monitoring.questions"></sowp-question-edit>
+		</accordion-group>
+	</accordion>
+	<p *ngIf="!(monitoring.questions.length > 0)">No questions yet!</p>
+</div>
+<p>&nbsp;</p>
+<div class="row">
+	<div class="col-xs-12 col-md-9">
+		<div class="btn-group" dropdown>
+			<button type="button" class="btn btn-primary" dropdownToggle>
+				<i class="fa fa-plus"></i> Dodaj <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+				<li role="menuitem">
+					<a class="dropdown-item" href="#" (click)="addTextBoxQuestion()">Pytanie tekstowe</a>
+				</li>
+				<li role="menuitem">
+					<a class="dropdown-item" href="#" (click)="addDropdownQuestion()">Pytanie wyboru</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-3">
+		<button class="btn btn-primary" (click)="saveMonitoring()">
+			<i class="fa fa-floppy-o" aria-hidden="true"></i> Zapisz
+		</button>
+	</div>
+</div>
