@@ -17,18 +17,31 @@
 </div>
 <h3>Pytania</h3>
 <div class="questions">
-	<accordion *ngIf="monitoring.questions.length > 0">
-		<accordion-group #group *ngFor="#question of monitoring.questions">
+	<accordion *ngIf="questions.length > 0">
+		<accordion-group #group *ngFor="#question of questions, #i = index">
 			<div accordion-heading>
-				<button class="btn btn-primary btn-xs" (click)="removeQuestion(question)"><i class="fa fa-trash" aria-hidden="true"></i> Remove</button>
-				Pytanie: {{ question.label }}
-				<i class="pull-right fa"  aria-hidden="true"
+				<i class="pull-left fa"  aria-hidden="true"
 					[ngClass]="{'fa-caret-up': group?.isOpen, 'fa-caret-down': !group?.isOpen}"></i>
+
+				Pytanie: {{ question.label }}
 			</div>
-			<sowp-question-edit [question]="question" [questions]="monitoring.questions"></sowp-question-edit>
+			<div class="row">
+				<div class="btn-group pull-right">
+					<button class="btn btn-primary btn-xs" (click)="removeQuestion(question)">
+						<i class="fa fa-trash" aria-hidden="true"></i> Skasuj
+					</button>
+					<button class="btn btn-primary btn-xs" *ngIf="i !== 0" (click)="moveQuestion(question, -1,  $event)">
+						<i class="fa fa-arrow-up" aria-hidden="true"></i> Do góry
+					</button>
+					<button class="btn btn-primary btn-xs" *ngIf="i != questions.length - 1" (click)="moveQuestion(question, +1,  $event)">
+						<i class="fa fa-arrow-down" aria-hidden="true"></i> W dół
+					</button>
+				</div>
+			</div>
+			<sowp-question-edit [question]="question" [questions]="questions"></sowp-question-edit>
 		</accordion-group>
 	</accordion>
-	<p *ngIf="!(monitoring.questions.length > 0)">No questions yet!</p>
+	<p *ngIf="!(questions.length > 0)">No questions yet!</p>
 </div>
 <p>&nbsp;</p>
 <div class="row">
@@ -53,3 +66,7 @@
 		</button>
 	</div>
 </div>
+
+<pre *ngIf="preview">
+	{{ preview | json}}
+</pre>

@@ -20,18 +20,13 @@
             <div class="control-label">Opcje:</div>
           </div>
           <div class="col-sm-10">
-            <sowp-question-option-edit [options]="question.options"></sowp-question-option-edit>
+            <sowp-question-option-edit [question]="question"></sowp-question-option-edit>
           </div>
         </div>
       </div>
       <div *ngSwitchDefault>
       </div>
   </dib>
-  <div class="form-group">
-    <label [attr.for]="question.key + '_description'" class="col-sm-2 control-label">Warunki ukrycia:</label>
-    <div class="col-sm-10">
-      <sowp-question-conditionals [questions]="questions" [current]="question"></sowp-question-conditionals>
-    </div>
-  </div>
+  <sowp-question-conditionals [questions]="questions" [current]="question"></sowp-question-conditionals>
 </form>
 

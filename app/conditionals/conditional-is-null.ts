@@ -2,8 +2,8 @@ import { BaseConditional } from './condititional-base';
 import { QuestionBase } from '../model/question-base';
 
 
-export class isEqualConditional extends BaseConditional{
-    type = 'is-equal';
+export class isNullConditional extends BaseConditional{
+    type = 'is-null';
     target: QuestionBase<any>;
     value: string;
     constructor(options:{
@@ -12,11 +12,10 @@ export class isEqualConditional extends BaseConditional{
     }) {
         super(options)
         this.target = options['target'];
-        this.value = options['value'];
     }
 
     isValid(answers):boolean {
-        return answers[this.target.key] == this.value;
+        return answers[this.target.key] == null || answers[this.target.key] === "";
     }
 
     toPlainObject(){

@@ -1,3 +1,5 @@
+import { EventEmitter } from 'angular2/core'
+
 import { slugify } from '../utils';
 import { BaseConditional } from '../conditionals/condititional-base';
 import { Serializable } from '../serializable';
@@ -10,7 +12,9 @@ export class QuestionBase<T> implements Serializable {
     description: string;
     order: number;
     controlType: string;
-    hideConditions: BaseConditional[] = []
+    private _hideConditions: BaseConditional[];
+    hideConditions_changes = new EventEmitter();
+
     constructor(options: {
         defaultValue?: T,
         id?: number,
@@ -18,7 +22,8 @@ export class QuestionBase<T> implements Serializable {
         label?: string,
         description?: string,
         order?: number,
-        controlType?: string
+        controlType?: string,
+        hideConditions?: BaseConditional[]
     } = {}) {
         this.id = (options.id || options.id > 0) ? options.id : -1;
         this._key = options.key || '';
@@ -26,6 +31,7 @@ export class QuestionBase<T> implements Serializable {
         this.description = options.description || '';
         this.order = options.order === undefined ? 1 : options.order;
         this.controlType = options.controlType || '';
+        this.hideConditions = options.hideConditions || [];
     }
 
     get key(){
@@ -39,8 +45,17 @@ export class QuestionBase<T> implements Serializable {
         this._key = value;
     }
 
+    get hideConditions(){
+        return this._hideConditions;
+    }
+
+    set hideConditions(conditions:BaseConditional[]) {
+        this._hideConditions = conditions;
+        this.hideConditions_changes.emit(conditions);
+    }
+
     isHidden(answers:any){
-        if (!this.hideConditions || this.hideConditions.length == 0)
+        if (this.hideConditions.length == 0)
             return false;
         return this.hideConditions.some(t => t.isValid(answers));
     }
@@ -55,7 +70,7 @@ export class QuestionBase<T> implements Serializable {
         obj['order'] = this.order;
         obj['controlType'] = this.controlType;
         obj['defaultValue'] = this.defaultValue;
-        obj['hideConditions'] = this.hideConditions.map(t => t.toPlainObject() );
+        obj['hideConditions'] = this._hideConditions.map(t => t.toPlainObject() );
         return obj;
     }
 }

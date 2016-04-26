@@ -1,21 +1,42 @@
-import { Component, Input } from 'angular2/core'
-
+import { Component, Input, OnInit } from 'angular2/core'
+import { 
+    DropdownQuestion, 
+    DropdownOption 
+} from '../model/question-dropdown';
 
 @Component({
     selector: 'sowp-question-option-edit',
     templateUrl: 'app/editor/question-option-edit.component.html'
 })
-export class QuestionOptionEditComponent{
+export class QuestionOptionEditComponent implements OnInit{
     constructor() {}
 
     @Input()
-    options:{key:string, value:string}[]
+    question: DropdownQuestion;
+
+    options: DropdownOption[] = []
+
+    ngOnInit() {
+        this.options = this.question.options;
+        this.question.options_changes.subscribe(
+            options => this.options = options
+        )
+    }
 
     removeOption(option:any){
-        this.options.splice(this.options.indexOf(option), 1);
-        // this.options = this.options.splice(position, 1);
+        let index = this.options.indexOf(option);
+        if(index >= 0){
+            this.question.options = [
+                ...this.options.slice(0, index),
+                ...this.options.slice(index + 1)
+            ]
+        }
     }
+
     addOption(){
-        this.options.push({ key: "", value: "" });
+        this.question.options = [
+            ...this.options
+            { key: "", value: "" },
+        ];
     }
 }

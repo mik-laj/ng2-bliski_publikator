@@ -10,6 +10,7 @@ import { TextboxQuestion } from '../model/question-textbox';
 import { DropdownQuestion } from '../model/question-dropdown';
 
 import { isEqualConditional } from '../conditionals/conditional-is-equal'
+import { isNullConditional } from '../conditionals/conditional-is-null'
 
 export class MonitoringService extends BaseApiService {
 
@@ -20,7 +21,6 @@ export class MonitoringService extends BaseApiService {
     getMonitoring(id: number):Observable<Monitoring> {
         return this.simple_get(`monitoring/${id}`)
             .map(data => {
-                console.log(data);
                 let questions = this.parseQuestionsList(data.questions);
                 this.addHideConditions(data.questions, questions);
                 return new Monitoring(
@@ -35,12 +35,12 @@ export class MonitoringService extends BaseApiService {
     }
 
     parseQuestionsList(questions:any[]):QuestionBase<any>[]{
-        console.log('parseQuestionsList', questions);
+        // console.log('parseQuestionsList', questions);
         return questions.map(this.parseQuestion)
     }
 
     parseQuestion(question):QuestionBase<any>{
-        console.log('parseQuestion', question);
+        // console.log('parseQuestion', question);
         switch(question.controlType){
             case 'textbox':
                 return new TextboxQuestion(question);
@@ -54,18 +54,19 @@ export class MonitoringService extends BaseApiService {
         var question_with_conditions = data.filter(t => t.hideConditions && t.hideConditions.length > 0);
         question_with_conditions.forEach( q => {
             var question = questions.find(t => t.id == q.id)
-            q.hideConditions.forEach(h => {
-                question.hideConditions.push(this.parseHideConditions(h, questions));
-            })
+            question.hideConditions = q.hideConditions.map(c => this.parseHideConditions(c, questions))
         });
     }
 
     parseHideConditions(data, questions: QuestionBase<any>[]) {
+        let target = questions.find(t => data.target == t.id);
         switch(data.type){
             case 'is-equal':{
-                let target = questions.find(t => data.target == t.id);
                 let value = data.value;
                 return new isEqualConditional({ target, value });
+            }
+            case 'is-null':{
+                return new isNullConditional({ target });
             }
 
         }

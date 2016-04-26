@@ -8,6 +8,7 @@ import {
 import { QuestionBase } from '../model/question-base';
 
 import { isEqualConditional } from '../conditionals/conditional-is-equal'
+import { isNullConditional } from '../conditionals/conditional-is-null'
 
 @Component({
     selector: 'sowp-question-conditionals',
@@ -23,13 +24,21 @@ export class QuestionConditionalsComponent{
     @Input()
     current: QuestionBase<any>
 
-    main(){
-
-    }
-
-    addIsEqualCondionals() {
+    addIsEqualCondional() {
         let target = this.questions[0];
         let conditionals = new isEqualConditional({ target: target, value: "" });
-        this.current.hideConditions.push(conditionals);
+        this.current.hideConditions = [
+            ...this.current.hideConditions,
+            conditionals
+        ];
+    }
+
+    addIsNullCondional() {
+        let target = this.questions[0];
+        let conditionals = new isEqualConditional({ target: target, value: "" });
+        this.current.hideConditions = [
+            ...this.current.hideConditions,
+            conditionals
+        ];
     }
 }
