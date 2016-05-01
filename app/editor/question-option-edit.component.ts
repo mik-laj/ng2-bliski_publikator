@@ -35,8 +35,8 @@ export class QuestionOptionEditComponent implements OnInit{
 
     addOption(){
         this.question.options = [
-            ...this.options
-            { key: "", value: "" },
+            ...this.options,
+            { key: "", value: "" }
         ];
     }
 }
