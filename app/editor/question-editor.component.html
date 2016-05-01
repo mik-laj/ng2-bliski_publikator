@@ -20,9 +20,9 @@
 	<accordion *ngIf="questions.length > 0">
 		<accordion-group #group *ngFor="#question of questions, #i = index">
 			<div accordion-heading>
-				<i class="pull-left fa"  aria-hidden="true"
-					[ngClass]="{'fa-caret-up': group?.isOpen, 'fa-caret-down': !group?.isOpen}"></i>
-
+				<i class="pull-right fa fa-caret-down"
+					[ngClass]="{'fa-rotate-180': group?.isOpen}"></i>
+				<i class="pull-right glyphicon" [ngClass]="{'glyphicon-caret-down': group?.isOpen, 'glyphicon-caret-up': !group?.isOpen}"></i>
 				Pytanie: {{ question.label }}
 			</div>
 			<div class="row">
