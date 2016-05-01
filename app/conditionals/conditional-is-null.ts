@@ -5,10 +5,8 @@ import { QuestionBase } from '../model/question-base';
 export class isNullConditional extends BaseConditional{
     type = 'is-null';
     target: QuestionBase<any>;
-    value: string;
     constructor(options:{
-        target: QuestionBase<any>,
-        value: string
+        target: QuestionBase<any>
     }) {
         super(options)
         this.target = options['target'];
@@ -21,7 +19,6 @@ export class isNullConditional extends BaseConditional{
     toPlainObject(){
         let obj = super.toPlainObject();
         obj['target'] = this.target.id;
-        obj['value'] = this.value;
         return obj; 
     }
 }
